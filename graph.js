@@ -1,6 +1,5 @@
 
-var fs = require('fs')
-const { template } = require('lodash')
+
 var tradeMaxValue = 300  //临时数据
 var tradeMinValue = 50   //临时数据
 var tradeMiddleValue = 200 //临时数据
@@ -76,7 +75,7 @@ var c = document.getElementById("dailyLineCanvas");
 var ctx = c.getContext("2d");
 ctx.lineWidth=backgroundLineWeight
 ctx.font = 15 * daliyLineYAxisFactor + "px sans-serif"
-ctx.strokeStyle = "black"
+ctx.strokeStyle = "grey"
 ctx.strokeRect(0, 0, daliyLineDisplayXAxis + daliyLinePaddingLeft + daliyLinePaddingRight + 2 * ctx.measureText("0.00%").width, daliyLineDisplayYAxis + daliyLinePaddingBottom + daliyLinePaddingTop + ctx.measureText("00:00").width / 2);
 
 
@@ -119,12 +118,12 @@ var totalTime = timeLineAndInterval[timeLineAndInterval.length - 1].Interval
 //声明x轴单位
 var xAixsPixelValueTransformUnit = (daliyLineDisplayXAxis / totalTime)
 //21：00开市的case (调整开市时间在timeAndInterval里更改)
-ctx.strokeStyle = "grey"
-ctx.font = 15 * daliyLineXAxisFactor + "px sans-serif"
+// ctx.strokeStyle = "grey"
+// ctx.font = 15 * daliyLineXAxisFactor + "px sans-serif"
 
 for (const value of timeLineAndInterval) {
     var textWidth = ctx.measureText(value.Time).width;
-    ctx.fillText(value.Time, daliyLinePaddingLeft + value.Interval * xAixsPixelValueTransformUnit - (textWidth / 2), daliyLineDisplayYAxis + daliyLinePaddingTop + daliyLinePaddingBottom)
+    // ctx.fillText(value.Time, daliyLinePaddingLeft + value.Interval * xAixsPixelValueTransformUnit - (textWidth / 2), daliyLineDisplayYAxis + daliyLinePaddingTop + daliyLinePaddingBottom)
     ctx.beginPath()
     ctx.moveTo(daliyLinePaddingLeft + value.Interval * xAixsPixelValueTransformUnit, daliyLinePaddingTop)
     ctx.lineTo(daliyLinePaddingLeft + value.Interval * xAixsPixelValueTransformUnit, daliyLineDisplayYAxis + daliyLinePaddingTop)
@@ -170,7 +169,7 @@ ctx.lineTo(count * xAixsPixelValueTransformUnit, yAixsLocation)
 count = 0
 
 ctx.save()
-ctx.translate(-daliyLinePaddingLeft, daliyLineDisplayYAxis + daliyLinePaddingBottom + daliyLinePaddingTop)
+ctx.translate(-daliyLinePaddingLeft, daliyLineDisplayYAxis-100)
 
 
 
@@ -187,7 +186,7 @@ var OImaxValue = Math.max(...minData.minsList[4].map(o => o.openInterest))
 var Vgap = VmaxValue - VminValue, OIgap = OImaxValue - OIminValue
 
 
-ctx.strokeStyle = "black"
+ctx.strokeStyle = "grey"
 ctx.strokeRect(0, 0, subgraphDisplayXAxis + subgraphPaddingLeft + subgraphPaddingRight + 2 * ctx.measureText("0.00%").width, subgraphDisplayYAxis + subgraphPaddingBottom + subgraphPaddingTop + ctx.measureText("00:00").width / 2);
 
 var count = 0

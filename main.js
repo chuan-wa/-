@@ -5,8 +5,8 @@ var BrowserWindow = electron.BrowserWindow
 
 var mainWindow = null
 try {
-	require('electron-reloader')(module, {});
-} catch (_) { }
+	require('electron-reloader')(module);
+} catch {}
 
 app.on('ready', () => {
     mainWindow = new BrowserWindow({ 
