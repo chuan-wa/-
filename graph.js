@@ -8,9 +8,9 @@ var backgroundLineWeight=0.5
 var backgroundLineColor="black"
 
 //主图变量
-var density = 4  //only even number x轴密度
+var density = 8  //only even number x轴密度
 var daliyLineXAxisFactor = 1  //x轴长度因子
-var daliyLineYAxisFactor = 1  //y轴长度因子
+var daliyLineYAxisFactor = 2  //y轴长度因子
 
 var daliyLineYPixel = 330
 var daliyLineXPixel = 800
@@ -26,12 +26,13 @@ var daliyLineDisplayYAxis = (daliyLineYPixel - daliyLinePaddingBottom - daliyLin
 
 
 //副图变量
-var density = 4  //only even number x轴密度
+var subDensity = 4  //only even number x轴密度
 var subgraphXAxisFactor = 1  //x轴长度因子
-var subgraphYAxisFactor = 1  //y轴长度因子
+var subgraphYAxisFactor = 0.7  //y轴长度因子
 var leftFontColor2 = "black", rightFontColor2 = "black", bottomFontColor2 = "black"
 var OILineColor = "blue", positiveV = "red", negativeV = "green"
 var backgroundLineWeight = 0.5, OILineWeight = 1
+var fontSize=15
 
 var subgraphYPixel = 330
 var subgraphXPixel = 800
@@ -41,7 +42,7 @@ var wordYAixsChange = 3
 var wordXAixsChange = 0
 
 //副图padding
-var subgraphPaddingTop = 30, subgraphPaddingBottom = 30, subgraphPaddingLeft = 80, subgraphPaddingRight = 30
+var subgraphPaddingTop = 15, subgraphPaddingBottom = 30, subgraphPaddingLeft = 80, subgraphPaddingRight = 30
 var subgraphDisplayXAxis = (subgraphXPixel - subgraphPaddingLeft - subgraphPaddingRight) * subgraphXAxisFactor
 var subgraphDisplayYAxis = (subgraphYPixel - subgraphPaddingBottom - subgraphPaddingTop) * subgraphYAxisFactor
 
@@ -74,9 +75,9 @@ for (var i = 0; i <= density; i++) {
 var c = document.getElementById("dailyLineCanvas");
 var ctx = c.getContext("2d");
 ctx.lineWidth=backgroundLineWeight
-ctx.font = 15 * daliyLineYAxisFactor + "px sans-serif"
+ctx.font = fontSize + "px sans-serif"
 ctx.strokeStyle = "grey"
-ctx.strokeRect(0, 0, daliyLineDisplayXAxis + daliyLinePaddingLeft + daliyLinePaddingRight + 2 * ctx.measureText("0.00%").width, daliyLineDisplayYAxis + daliyLinePaddingBottom + daliyLinePaddingTop + ctx.measureText("00:00").width / 2);
+// ctx.strokeRect(0, 0, daliyLineDisplayXAxis + daliyLinePaddingLeft + daliyLinePaddingRight + 2 * ctx.measureText("0.00%").width, daliyLineDisplayYAxis + daliyLinePaddingBottom + daliyLinePaddingTop + ctx.measureText("00:00").width / 2);
 
 
 //定义y轴值
@@ -111,7 +112,7 @@ for (i = 0; i <= density; i++) {
     // console.log(yAixsPixel)
     count++
 }
-ctx.strokeStyle = "black"
+ctx.strokeStyle = "grey"
 count = 0
 //总时间
 var totalTime = timeLineAndInterval[timeLineAndInterval.length - 1].Interval
@@ -169,7 +170,7 @@ ctx.lineTo(count * xAixsPixelValueTransformUnit, yAixsLocation)
 count = 0
 
 ctx.save()
-ctx.translate(-daliyLinePaddingLeft, daliyLineDisplayYAxis-100)
+ctx.translate(-daliyLinePaddingLeft, daliyLineDisplayYAxis/2)
 
 
 
@@ -187,22 +188,22 @@ var Vgap = VmaxValue - VminValue, OIgap = OImaxValue - OIminValue
 
 
 ctx.strokeStyle = "grey"
-ctx.strokeRect(0, 0, subgraphDisplayXAxis + subgraphPaddingLeft + subgraphPaddingRight + 2 * ctx.measureText("0.00%").width, subgraphDisplayYAxis + subgraphPaddingBottom + subgraphPaddingTop + ctx.measureText("00:00").width / 2);
+// ctx.strokeRect(0, 0, subgraphDisplayXAxis + subgraphPaddingLeft + subgraphPaddingRight + 2 * ctx.measureText("0.00%").width, subgraphDisplayYAxis + subgraphPaddingBottom + subgraphPaddingTop + ctx.measureText("00:00").width / 2);
 
 var count = 0
 
-for (var i = 0; i <= density; i++) {
-    VyAxisValue[i] = VminValue + Vgap / density * i
+for (var i = 0; i <= subDensity; i++) {
+    VyAxisValue[i] = VminValue + Vgap / subDensity * i
 }
-for (var i = 0; i <= density; i++) {
-    OIyAxisValue[i] = OIminValue + OIgap / density * i
+for (var i = 0; i <= subDensity; i++) {
+    OIyAxisValue[i] = OIminValue + OIgap / subDensity * i
 }
 
 //左边的y轴，成交量值
-ctx.font = 15 * subgraphYAxisFactor + "px sans-serif"
+ctx.font = fontSize  + "px sans-serif"
 ctx.fillStyle = leftFontColor2
 for (const value of VyAxisValue) {
-    var yAixsPixel = (subgraphDisplayYAxis + subgraphPaddingTop) - count * ((subgraphDisplayYAxis) / density)
+    var yAixsPixel = (subgraphDisplayYAxis + subgraphPaddingTop) - count * ((subgraphDisplayYAxis) / subDensity)
     ctx.fillText(Vgap * count, ctx.measureText("111111").width / 3, yAixsPixel + wordYAixsChange)
     count++
 }
@@ -211,7 +212,7 @@ count = 0
 //右边的y轴，持仓量值
 ctx.fillStyle = rightFontColor2
 for (const value of OIyAxisValue) {
-    var yAixsPixel = (subgraphDisplayYAxis + subgraphPaddingTop) - count * ((subgraphDisplayYAxis) / density)
+    var yAixsPixel = (subgraphDisplayYAxis + subgraphPaddingTop) - count * ((subgraphDisplayYAxis) / subDensity)
     if (count == 0) { ctx.fillText("(万)", subgraphDisplayXAxis + subgraphPaddingLeft + subgraphPaddingRight, yAixsPixel + wordYAixsChange) }
     else { ctx.fillText((value / 10000).toFixed(digitsAfterDots), subgraphDisplayXAxis + subgraphPaddingLeft + subgraphPaddingRight, yAixsPixel + wordYAixsChange) }
     count++
@@ -221,9 +222,9 @@ ctx.fillStyle = "black"
 
 //画y轴线
 ctx.lineWidth = backgroundLineWeight
-for (i = 0; i <= density; i++) {
+for (i = 0; i <= subDensity; i++) {
     ctx.strokeStyle = "grey"
-    var yAixsPixel = (subgraphDisplayYAxis + subgraphPaddingTop) - count * ((subgraphDisplayYAxis) / density)
+    var yAixsPixel = (subgraphDisplayYAxis + subgraphPaddingTop) - count * ((subgraphDisplayYAxis) / subDensity)
     ctx.beginPath()
     ctx.moveTo(subgraphPaddingLeft, yAixsPixel)
     ctx.lineTo(subgraphDisplayXAxis + subgraphPaddingLeft, yAixsPixel)
@@ -239,7 +240,7 @@ var totalTime = timeLineAndInterval[timeLineAndInterval.length - 1].Interval
 var xAixsPixelValueTransformUnit = (subgraphDisplayXAxis / totalTime)
 //21：00开市的case (调整开市时间在timeAndInterval里更改)
 ctx.fillStyle = bottomFontColor2
-ctx.font = 15 * subgraphXAxisFactor + "px sans-serif"
+ctx.font = fontSize  + "px sans-serif"
 
 for (const value of timeLineAndInterval) {
     var textWidth = ctx.measureText(value.Time).width;
